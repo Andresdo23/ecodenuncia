@@ -316,7 +316,7 @@ body {
 /* --- Novos Estilos para Inputs de Senha --- */
 /* --- Estilos para Campo de Senha (Igual ao Mobile) --- */
 .password-container {
-  position: relative; /* Necessário para o botão ficar dentro */
+  position: relative; /* Permite posicionar o botão 'absolute' dentro dele */
   display: flex;
   align-items: center;
   width: 100%;
@@ -325,11 +325,11 @@ body {
 .password-container input {
   width: 100%;
   padding: 0.75rem;
-  padding-right: 70px; /* Espaço extra na direita para o texto não ficar por cima do botão */
+  padding-right: 70px; /* Espaço para o botão não ficar em cima do texto */
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
 }
 
 .password-container input:focus {
@@ -339,7 +339,9 @@ body {
 
 .btn-toggle-password {
   position: absolute; /* Flutua sobre o input */
-  right: 15px; /* Distância da borda direita */
+  right: 15px; /* Encostado à direita */
+  top: 50%;
+  transform: translateY(-50%); /* Centraliza verticalmente */
   background: none;
   border: none;
   color: #005A9C; /* Azul EcoDenúncia */
@@ -348,7 +350,7 @@ body {
   cursor: pointer;
   padding: 0;
   outline: none;
-  user-select: none;
+  z-index: 2; /* Garante que fica por cima do input */
 }
 
 .btn-toggle-password:hover {

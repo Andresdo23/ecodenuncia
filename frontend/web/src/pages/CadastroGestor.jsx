@@ -14,6 +14,8 @@ function CadastroGestor() {
   
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  
+  // Um único estado controla ambos os campos
   const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -82,6 +84,7 @@ function CadastroGestor() {
               required
               placeholder="Mínimo 6 caracteres"
             />
+            {/* Botão ÚNICO que controla tudo */}
             <button 
               type="button" 
               className="btn-toggle-password"
@@ -96,6 +99,7 @@ function CadastroGestor() {
           <label htmlFor="confirmarSenha">Confirmar Senha:</label>
           <div className="password-container">
             <input
+              // Usa o MESMO estado para mostrar/ocultar
               type={mostrarSenha ? "text" : "password"}
               id="confirmarSenha"
               value={confirmarSenha}
@@ -103,14 +107,7 @@ function CadastroGestor() {
               required
               placeholder="Repita a senha"
             />
-            {/* Opcional: Botão duplicado ou controlado pelo mesmo estado */}
-            <button 
-              type="button" 
-              className="btn-toggle-password"
-              onClick={() => setMostrarSenha(!mostrarSenha)}
-            >
-              {mostrarSenha ? 'Ocultar' : 'Ver'}
-            </button>
+            {/* SEM BOTÃO AQUI (O de cima já controla este) */}
           </div>
         </div>
 
