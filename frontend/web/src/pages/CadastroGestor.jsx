@@ -5,7 +5,7 @@ import axios from 'axios'; // Usamos axios direto, não a 'api' global
 
 // O 'api.js' não funciona aqui porque precisamos de enviar
 // uma requisição ANTES de termos um token.
-const API_URL = 'http://localhost:3001/api';
+const API_URL = 'https://ecodenuncia.onrender.com/api';
 
 function CadastroGestor() {
   const navigate = useNavigate();
