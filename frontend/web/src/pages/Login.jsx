@@ -10,8 +10,6 @@ function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState(null);
-  
-  // Estado para controlar a visibilidade
   const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -19,11 +17,7 @@ function Login() {
     setError(null);
 
     try {
-      const response = await api.post('/auth/login', {
-        email: email,
-        senha: senha
-      });
-
+      const response = await api.post('/auth/login', { email, senha });
       const { token, usuario } = response.data.data;
 
       if (usuario.tipo_usuario !== 'gestor') {
@@ -56,24 +50,25 @@ function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            placeholder="ex: gestor@ecodenuncia.com" // Placeholder adicionado
+            placeholder="ex: gestor@ecodenuncia.com"
           />
         </div>
         
         <div className="form-group">
           <label htmlFor="senha">Senha:</label>
-          <div className="password-wrapper">
+          {/* Container relativo para posicionar o botão dentro */}
+          <div className="password-container">
             <input
-              type={mostrarSenha ? "text" : "password"} // Tipo dinâmico
+              type={mostrarSenha ? "text" : "password"}
               id="senha"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               required
-              placeholder="Digite sua senha" // Placeholder adicionado
+              placeholder="Digite sua senha"
             />
             <button 
-              type="button" // Importante para não submeter o form
-              className="password-toggle-btn"
+              type="button"
+              className="btn-toggle-password"
               onClick={() => setMostrarSenha(!mostrarSenha)}
             >
               {mostrarSenha ? 'Ocultar' : 'Ver'}
