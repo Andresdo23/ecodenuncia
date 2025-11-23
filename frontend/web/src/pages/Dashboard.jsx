@@ -1,23 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import api from '../services/api';
-
-// --- Importações do Mapa (Leaflet) ---
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css'; // O CSS é obrigatório
+import 'leaflet/dist/leaflet.css';
 
-// ---
-// CONFIGURAÇÃO DE ÍCONES (CDN STABLE)
-// Definimos explicitamente todos os ícones para não depender do padrão quebrado do Leaflet
-// ---
+// --- CORREÇÃO DOS ÍCONES ---
+const shadowUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png';
 
-const iconShadow = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png';
-
-// Função geradora para não repetir código
-const createCustomIcon = (url) => {
+const createIcon = (url) => {
   return new L.Icon({
     iconUrl: url,
-    shadowUrl: iconShadow,
+    shadowUrl: shadowUrl,
     iconSize: [25, 41],
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
@@ -25,48 +18,37 @@ const createCustomIcon = (url) => {
   });
 };
 
-// Criamos as instâncias dos ícones aqui fora para serem reutilizadas
-const ICONS = {
-  blue: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png'),
-  red: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png'),
-  gold: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png'),
-  green: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png'),
-  grey: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png'),
-};
+// URLs dos Marcadores
+const blueIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png');
+const redIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png');
+const yellowIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png');
 
-// --- Fim da Configuração de Ícones ---
+// ALTERAÇÃO: Usando uma URL alternativa para o verde, para forçar a atualização do cache
+const greenIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png?v=2'); 
 
+const greyIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png');
+// --- FIM CORREÇÃO ---
 
-// --- Componente Modal de Detalhes ---
 const DenunciaDetailModal = ({ denuncia, onClose }) => {
   if (!denuncia) return null;
-
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close-btn" onClick={onClose}>&times;</button>
-        <h3>Detalhes da Denúncia #{denuncia.id.substring(0, 8)}</h3>
-        
-        <p><strong>Descrição:</strong> {denuncia.descricao || "N/A"}</p>
-        <p><strong>Endereço:</strong> {denuncia.endereco_completo || "N/A"}</p>
-        <p><strong>Referência:</strong> {denuncia.ponto_referencia || "N/A"}</p>
-        <p><strong>Data:</strong> {new Date(denuncia.data_criacao).toLocaleString('pt-BR')}</p>
+        <h3>Denúncia #{denuncia.id.substring(0, 6)}</h3>
         <p><strong>Status:</strong> {denuncia.nome_status}</p>
-        
-        <a 
-          href={denuncia.url_foto} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="modal-photo-link"
-        >
-          Ver Foto da Denúncia
+        <p><strong>Descrição:</strong> {denuncia.descricao || "Sem descrição"}</p>
+        <p><strong>Endereço:</strong> {denuncia.endereco_completo || "Não informado"}</p>
+        <p><strong>Ref:</strong> {denuncia.ponto_referencia || "-"}</p>
+        <p><strong>Data:</strong> {new Date(denuncia.data_criacao).toLocaleString('pt-BR')}</p>
+        <a href={denuncia.url_foto} target="_blank" rel="noopener noreferrer" className="modal-photo-link">
+          Ver Foto Original
         </a>
       </div>
     </div>
   );
 };
 
-// --- Componente da Tabela ---
 const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
   const statusOptions = [
     { id: 1, nome: "Recebida" },
@@ -74,19 +56,12 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
     { id: 3, nome: "Resolvida" },
     { id: 4, nome: "Rejeitada" },
   ];
-  
-  const getStatusClass = (nomeStatus) => {
-    if (nomeStatus === 'Recebida') return 'status-recebida';
-    if (nomeStatus === 'Em Análise') return 'status-em-analise';
-    if (nomeStatus === 'Resolvida') return 'status-resolvida';
-    if (nomeStatus === 'Rejeitada') return 'status-rejeitada';
-    return '';
-  };
 
-  const truncarTexto = (texto, limite) => {
-    if (!texto) return "N/A";
-    if (texto.length <= limite) return texto;
-    return texto.substring(0, limite) + "...";
+  const getStatusClass = (status) => {
+    if (status === 'Recebida') return 'status-recebida';
+    if (status === 'Em Análise') return 'status-em-analise';
+    if (status === 'Resolvida') return 'status-resolvida';
+    return 'status-rejeitada';
   };
 
   return (
@@ -95,48 +70,30 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Descrição (Prévia)</th>
+            <th>Descrição</th>
             <th>Endereço</th>
-            <th>Data</th>
             <th>Status</th>
             <th>Mudar Status</th>
           </tr>
         </thead>
         <tbody>
-          {denuncias.map((denuncia) => {
-            const statusAtualId = statusOptions.find(s => s.nome === denuncia.nome_status)?.id || 1;
-            
+          {denuncias.map((d) => {
+            const statusId = statusOptions.find(s => s.nome === d.nome_status)?.id || 1;
             return (
-              <tr 
-                key={denuncia.id} 
-                onClick={() => onRowClick(denuncia)}
-                style={{ cursor: 'pointer' }}
-              >
-                <td>#{denuncia.id.substring(0, 8)}...</td>
-                <td>{truncarTexto(denuncia.descricao, 30)}</td>
-                <td>{truncarTexto(denuncia.endereco_completo, 30)}</td>
-                <td>{new Date(denuncia.data_criacao).toLocaleDateString('pt-BR')}</td>
-                <td>
-                  <span className={`status-tag ${getStatusClass(denuncia.nome_status)}`}>
-                    {denuncia.nome_status}
-                  </span>
-                </td>
+              <tr key={d.id} onClick={() => onRowClick(d)} style={{ cursor: 'pointer' }}>
+                <td>#{d.id.substring(0, 6)}</td>
+                <td>{d.descricao ? d.descricao.substring(0, 25) + (d.descricao.length > 25 ? '...' : '') : 'N/A'}</td>
+                <td>{d.endereco_completo ? d.endereco_completo.substring(0, 20) + '...' : 'N/A'}</td>
+                <td><span className={`status-tag ${getStatusClass(d.nome_status)}`}>{d.nome_status}</span></td>
                 <td>
                   <select 
-                    className="status-select"
-                    value={statusAtualId} 
-                    onChange={(e) => {
-                      e.stopPropagation();
-                      onStatusChange(denuncia.id, parseInt(e.target.value));
-                    }}
+                    className="status-select" 
+                    value={statusId}
+                    disabled={statusId === 3}
                     onClick={(e) => e.stopPropagation()}
-                    disabled={statusAtualId === 3}
+                    onChange={(e) => { e.stopPropagation(); onStatusChange(d.id, parseInt(e.target.value)); }}
                   >
-                    {statusOptions.map(status => (
-                      <option key={status.id} value={status.id}>
-                        {status.nome}
-                      </option>
-                    ))}
+                    {statusOptions.map(s => <option key={s.id} value={s.id}>{s.nome}</option>)}
                   </select>
                 </td>
               </tr>
@@ -148,7 +105,6 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
   );
 };
 
-// --- Componente Principal do Dashboard ---
 function Dashboard() {
   const [denuncias, setDenuncias] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -157,101 +113,57 @@ function Dashboard() {
   const [modalDenuncia, setModalDenuncia] = useState(null);
 
   useEffect(() => {
-    const fetchDenuncias = async () => {
-      try {
-        setLoading(true); setError(null);
-        const response = await api.get('/denuncias');
-        setDenuncias(response.data.data);
-      } catch (err) {
-        console.error("Erro ao buscar denúncias:", err);
-        setError("Não foi possível carregar as denúncias.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDenuncias();
+    api.get('/denuncias')
+      .then(res => setDenuncias(res.data.data))
+      .catch(err => setError("Erro ao carregar dados."))
+      .finally(() => setLoading(false));
   }, []);
 
-  const handleStatusChange = async (idDenuncia, novoStatusId) => {
+  const handleStatusChange = async (id, statusId) => {
     try {
-      const response = await api.put(`/denuncias/${idDenuncia}/status`, { 
-        id_status: novoStatusId 
-      });
-      const denunciaAtualizada = response.data.data;
-      setDenuncias(denunciasAnteriores => 
-        denunciasAnteriores.map(d => 
-          d.id === idDenuncia ? { ...d, nome_status: denunciaAtualizada.nome_status } : d
-        )
-      );
-    } catch (err) {
-      console.error("Erro ao atualizar status:", err);
-      alert(`Erro ao atualizar status: ${err.response?.data?.error || 'Tente novamente.'}`);
-    }
+      const res = await api.put(`/denuncias/${id}/status`, { id_status: statusId });
+      const updated = res.data.data;
+      setDenuncias(prev => prev.map(d => d.id === id ? { ...d, nome_status: updated.nome_status } : d));
+    } catch (err) { alert("Erro ao atualizar status."); }
   };
 
-  const { denunciasFiltradas, contagens } = useMemo(() => {
-    let filtradas = denuncias;
-    const MapeamentoStatus = {
-      'Pendente': ['Recebida'],
-      'Em Andamento': ['Em Análise'],
-      'Resolvido': ['Resolvida']
+  const { filtradas, contagens } = useMemo(() => {
+    let list = denuncias;
+    const mapStatus = {
+      'Pendente': ['Recebida'], 'Em Andamento': ['Em Análise'], 'Resolvido': ['Resolvida']
     };
     if (filtroStatus !== 'Todos') {
-      filtradas = denuncias.filter(d => MapeamentoStatus[filtroStatus]?.includes(d.nome_status));
+      list = denuncias.filter(d => mapStatus[filtroStatus]?.includes(d.nome_status));
     }
-    const contagens = {
+    const counts = {
       total: denuncias.length,
-      pendente: denuncias.filter(d => MapeamentoStatus['Pendente'].includes(d.nome_status)).length,
-      emAndamento: denuncias.filter(d => MapeamentoStatus['Em Andamento'].includes(d.nome_status)).length,
-      resolvida: denuncias.filter(d => MapeamentoStatus['Resolvido'].includes(d.nome_status)).length,
+      pendente: denuncias.filter(d => d.nome_status === 'Recebida').length,
+      andamento: denuncias.filter(d => d.nome_status === 'Em Análise').length,
+      resolvida: denuncias.filter(d => d.nome_status === 'Resolvida').length,
     };
-    return { denunciasFiltradas: filtradas, contagens };
+    return { filtradas: list, contagens: counts };
   }, [denuncias, filtroStatus]);
-  
-  // Função Simples e Direta para ícones
-  const getIconeDoMapa = (nomeStatus) => {
-    if (nomeStatus === 'Recebida') return ICONS.red;
-    if (nomeStatus === 'Em Análise') return ICONS.gold; // Alterado para gold (amarelo)
-    if (nomeStatus === 'Resolvida') return ICONS.green;
-    if (nomeStatus === 'Rejeitada') return ICONS.grey;
-    return ICONS.blue; // Fallback
+
+  const getIcone = (status) => {
+    if (status === 'Recebida') return redIcon;
+    if (status === 'Em Análise') return yellowIcon;
+    if (status === 'Resolvida') return greenIcon;
+    return greyIcon;
   };
 
   return (
     <>
-      <DenunciaDetailModal 
-        denuncia={modalDenuncia} 
-        onClose={() => setModalDenuncia(null)} 
-      />
-    
+      <DenunciaDetailModal denuncia={modalDenuncia} onClose={() => setModalDenuncia(null)} />
       <div className="dashboard-container">
-        {/* MAPA */}
-        {loading && <p>A carregar mapa...</p>}
-        {error && <p style={{ color: 'red' }}>{error}</p>}
         {!loading && !error && (
           <div className="map-container-wrapper">
-            <MapContainer 
-              center={[-3.74, -38.52]}
-              zoom={13} 
-              style={{ height: '100%', width: '100%' }}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {denunciasFiltradas.map((denuncia) => (
-                <Marker 
-                  key={denuncia.id} 
-                  position={[denuncia.latitude, denuncia.longitude]}
-                  icon={getIconeDoMapa(denuncia.nome_status)}
-                >
+            <MapContainer center={[-3.74, -38.52]} zoom={13} style={{ height: '100%', width: '100%' }}>
+              <TileLayer attribution='&copy; OpenStreetMap' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+              {filtradas.map(d => (
+                <Marker key={d.id} position={[d.latitude, d.longitude]} icon={getIcone(d.nome_status)}>
                   <Popup>
-                    <strong>Status: {denuncia.nome_status}</strong><br />
-                    <hr />
-                    <strong>Descrição:</strong> {denuncia.descricao || "N/A"}<br />
-                    <a href={denuncia.url_foto} target="_blank" rel="noopener noreferrer">
-                      Ver Foto
-                    </a>
+                    <b>{d.nome_status}</b><br/>{d.descricao}<br/>
+                    <button onClick={() => setModalDenuncia(d)} style={{marginTop:5, cursor:'pointer', color:'blue', textDecoration:'underline', border:'none', background:'none', padding:0}}>Ver Detalhes</button>
                   </Popup>
                 </Marker>
               ))}
@@ -260,39 +172,23 @@ function Dashboard() {
         )}
 
         <div className="filter-bar">
-          <button className={`filter-btn ${filtroStatus === 'Todos' ? 'active' : ''}`} onClick={() => setFiltroStatus('Todos')}>Todos</button>
-          <button className={`filter-btn ${filtroStatus === 'Pendente' ? 'active' : ''}`} onClick={() => setFiltroStatus('Pendente')}>Pendentes (Recebidas)</button>
-          <button className={`filter-btn ${filtroStatus === 'Em Andamento' ? 'active' : ''}`} onClick={() => setFiltroStatus('Em Andamento')}>Em Andamento (Em Análise)</button>
-          <button className={`filter-btn ${filtroStatus === 'Resolvido' ? 'active' : ''}`} onClick={() => setFiltroStatus('Resolvido')}>Resolvidas</button>
+          {['Todos', 'Pendente', 'Em Andamento', 'Resolvido'].map(f => (
+            <button key={f} className={`filter-btn ${filtroStatus === f ? 'active' : ''}`} onClick={() => setFiltroStatus(f)}>
+              {f}
+            </button>
+          ))}
         </div>
 
         <div className="summary-cards">
-          <div className="summary-card total">
-            <h3>Total</h3>
-            <span className="count">{contagens.total}</span>
-          </div>
-          <div className="summary-card pendente">
-            <h3>Pendentes</h3>
-            <span className="count">{contagens.pendente}</span>
-          </div>
-          <div className="summary-card andamento">
-            <h3>Em Andamento</h3>
-            <span className="count">{contagens.emAndamento}</span>
-        </div>
-          <div className="summary-card resolvida">
-            <h3>Resolvidas</h3>
-            <span className="count">{contagens.resolvida}</span>
-          </div>
+          <div className="summary-card total"><h3>Total</h3><span className="count">{contagens.total}</span></div>
+          <div className="summary-card pendente"><h3>Pendentes</h3><span className="count">{contagens.pendente}</span></div>
+          <div className="summary-card andamento"><h3>Em Andamento</h3><span className="count">{contagens.andamento}</span></div>
+          <div className="summary-card resolvida"><h3>Resolvidas</h3><span className="count">{contagens.resolvida}</span></div>
         </div>
 
-        {loading && <p>A carregar denúncias...</p>}
-        {!loading && !error && (
-          <DenunciasTable 
-            denuncias={denunciasFiltradas} 
-            onStatusChange={handleStatusChange}
-            onRowClick={(denuncia) => setModalDenuncia(denuncia)}
-          />
-        )}
+        {loading ? <p>Carregando...</p> : 
+          <DenunciasTable denuncias={filtradas} onStatusChange={handleStatusChange} onRowClick={setModalDenuncia} />
+        }
       </div>
     </>
   );
