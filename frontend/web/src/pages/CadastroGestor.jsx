@@ -10,20 +10,34 @@ function CadastroGestor() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState(''); // Novo Campo
   const [chaveSecreta, setChaveSecreta] = useState('');
+  
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [mostrarSenha, setMostrarSenha] = useState(false); // Estado visual
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
 
-    if (!nome || !email || !senha || !chaveSecreta) {
+    // Validações
+    if (!nome || !email || !senha || !confirmarSenha || !chaveSecreta) {
         setError('Todos os campos são obrigatórios.');
-        setLoading(false);
         return;
     }
+
+    if (senha !== confirmarSenha) {
+        setError('As senhas não coincidem.');
+        return;
+    }
+
+    if (senha.length < 6) {
+        setError('A senha deve ter pelo menos 6 caracteres.');
+        return;
+    }
+
+    setLoading(true);
 
     try {
       await axios.post(
@@ -47,7 +61,6 @@ function CadastroGestor() {
   };
 
   return (
-    // USANDO AS CLASSES CSS RESPONSIVAS
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
         <h2>Novo Gestor</h2>
@@ -60,7 +73,7 @@ function CadastroGestor() {
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             required
-            placeholder="Seu nome"
+            placeholder="ex: Carlos Mendes"
           />
         </div>
 
@@ -72,20 +85,43 @@ function CadastroGestor() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            placeholder="email@exemplo.com"
+            placeholder="ex: gestor@prefeitura.gov.br"
           />
         </div>
 
         <div className="form-group">
           <label htmlFor="senha">Senha:</label>
-          <input
-            type="password"
-            id="senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-            placeholder="Sua senha"
-          />
+          <div className="password-wrapper">
+            <input
+              type={mostrarSenha ? "text" : "password"}
+              id="senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+              placeholder="Mínimo 6 caracteres"
+            />
+            <button 
+              type="button" 
+              className="password-toggle-btn"
+              onClick={() => setMostrarSenha(!mostrarSenha)}
+            >
+              {mostrarSenha ? 'Ocultar' : 'Ver'}
+            </button>
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="confirmarSenha">Confirmar Senha:</label>
+          <div className="password-wrapper">
+            <input
+              type={mostrarSenha ? "text" : "password"}
+              id="confirmarSenha"
+              value={confirmarSenha}
+              onChange={(e) => setConfirmarSenha(e.target.value)}
+              required
+              placeholder="Repita a senha"
+            />
+          </div>
         </div>
 
         <div className="form-group">
@@ -96,7 +132,7 @@ function CadastroGestor() {
             value={chaveSecreta}
             onChange={(e) => setChaveSecreta(e.target.value)}
             required
-            placeholder="Chave de admin"
+            placeholder="Chave de administrador"
           />
         </div>
         

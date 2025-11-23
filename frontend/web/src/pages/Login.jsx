@@ -10,22 +10,30 @@ function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState(null);
+  
+  // Estado para controlar a visibilidade
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
     try {
       const response = await api.post('/auth/login', {
         email: email,
         senha: senha
       });
+
       const { token, usuario } = response.data.data;
+
       if (usuario.tipo_usuario !== 'gestor') {
         setError('Acesso negado. Este painel é exclusivo para gestores.');
         return;
       }
+
       login(token, usuario);
       navigate('/');
+
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
         setError(err.response.data.error);
@@ -48,25 +56,36 @@ function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            placeholder="ex: gestor@ecodenuncia.com" // Placeholder adicionado
           />
         </div>
         
         <div className="form-group">
           <label htmlFor="senha">Senha:</label>
-          <input
-            type="password"
-            id="senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-          />
+          <div className="password-wrapper">
+            <input
+              type={mostrarSenha ? "text" : "password"} // Tipo dinâmico
+              id="senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              required
+              placeholder="Digite sua senha" // Placeholder adicionado
+            />
+            <button 
+              type="button" // Importante para não submeter o form
+              className="password-toggle-btn"
+              onClick={() => setMostrarSenha(!mostrarSenha)}
+            >
+              {mostrarSenha ? 'Ocultar' : 'Ver'}
+            </button>
+          </div>
         </div>
         
         {error && (
           <p className="form-error">{error}</p>
         )}
 
-        <button typeS="submit" className="btn-submit">
+        <button type="submit" className="btn-submit">
           Entrar
         </button>
         
