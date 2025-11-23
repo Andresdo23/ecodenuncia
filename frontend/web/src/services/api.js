@@ -1,9 +1,14 @@
 import axios from 'axios';
 
+// Tenta ler a variável de ambiente do Vercel. 
+// Se não existir (no seu PC), usa localhost.
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+
 const api = axios.create({
-  // O endereço onde seu backend (Node.js) está rodando
-  baseURL: 'https://ecodenuncia.onrender.com/api' // Atualizando para produção
+  baseURL: API_URL
 });
+
+// ... (resto do código dos interceptors) ...
 
 // MELHORIA: Interceptor para adicionar o token JWT
 // Isso adiciona o token de login em TODAS as requisições
