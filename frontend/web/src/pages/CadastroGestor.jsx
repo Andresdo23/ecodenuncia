@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useNavigate }
- from 'react-router-dom';
-import axios from 'axios'; // Usamos axios direto, não a 'api' global
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-// O 'api.js' não funciona aqui porque precisamos de enviar
-// uma requisição ANTES de termos um token.
+// URL Fixa do Render (Produção)
 const API_URL = 'https://ecodenuncia.onrender.com/api';
 
 function CadastroGestor() {
@@ -12,7 +10,7 @@ function CadastroGestor() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [chaveSecreta, setChaveSecreta] = useState(''); // Chave para criar gestor
+  const [chaveSecreta, setChaveSecreta] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -28,23 +26,12 @@ function CadastroGestor() {
     }
 
     try {
-      // Fazemos a chamada de registo com a chave secreta no header
       await axios.post(
         `${API_URL}/auth/register`, 
-        {
-          nome,
-          email,
-          senha,
-          tipo_usuario: 'gestor'
-        }, 
-        {
-          headers: {
-            'x-admin-secret': chaveSecreta // Envia a chave
-          }
-        }
+        { nome, email, senha, tipo_usuario: 'gestor' }, 
+        { headers: { 'x-admin-secret': chaveSecreta } }
       );
       
-      // Sucesso!
       alert('Conta de Gestor criada! Por favor, faça login.');
       navigate('/login');
 
@@ -60,65 +47,71 @@ function CadastroGestor() {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '50px auto' }}>
-      <h2>Painel de Gestão - Criar Conta Gestor</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '10px' }}>
-          <label htmlFor="nome">Nome Completo:</label><br />
+    // USANDO AS CLASSES CSS RESPONSIVAS
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form">
+        <h2>Novo Gestor</h2>
+        
+        <div className="form-group">
+          <label htmlFor="nome">Nome Completo:</label>
           <input
             type="text"
             id="nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px' }}
+            placeholder="Seu nome"
           />
         </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label htmlFor="email">Email:</label><br />
+
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
           <input
             type="email"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px' }}
+            placeholder="email@exemplo.com"
           />
         </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label htmlFor="senha">Senha:</label><br />
+
+        <div className="form-group">
+          <label htmlFor="senha">Senha:</label>
           <input
             type="password"
             id="senha"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px' }}
+            placeholder="Sua senha"
           />
         </div>
-        <div style={{ marginBottom: '10px' }}>
-          <label htmlFor="chave">Chave Secreta de Admin:</label><br />
+
+        <div className="form-group">
+          <label htmlFor="chave">Chave Secreta:</label>
           <input
             type="password"
             id="chave"
             value={chaveSecreta}
             onChange={(e) => setChaveSecreta(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px' }}
+            placeholder="Chave de admin"
           />
         </div>
         
         {error && (
-          <p style={{ color: 'red' }}>{error}</p>
+          <p className="form-error">{error}</p>
         )}
 
-        <button type="submit" style={{ padding: '10px 15px' }} disabled={loading}>
+        <button type="submit" className="btn-submit" disabled={loading}>
           {loading ? 'A criar...' : 'Criar Conta'}
         </button>
+        
+        <Link to="/login" className="form-link">
+          Já tem conta? Faça login
+        </Link>
       </form>
-      <Link to="/login" style={{ display: 'block', marginTop: '15px' }}>
-        Já tem conta? Faça login
-      </Link>
     </div>
   );
 }

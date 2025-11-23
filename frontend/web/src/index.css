@@ -51,29 +51,91 @@ body {
 }
 
 /* Login */
+/* ------------------------- */
+/* Página: Login e Cadastro  */
+/* ------------------------- */
 .login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-  min-height: 70vh;
+  padding: 1rem; /* Reduzido de 2rem para caber melhor no mobile */
+  min-height: 80vh; /* Garante altura suficiente */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .login-form {
   background: #FFFFFF;
-  padding: 2.5rem;
+  padding: 2rem; /* Espaçamento interno confortável */
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* Não deixa ficar muito largo no PC */
+  box-sizing: border-box; /* Garante que o padding não estoure a largura */
 }
 
-.login-form h2 { text-align: center; color: #005A9C; margin-bottom: 1.5rem; }
-.login-form .form-group { margin-bottom: 1rem; }
-.login-form input { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-.login-form .btn-submit { width: 100%; padding: 0.75rem; background-color: #005A9C; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-.login-form .form-link { display: block; text-align: center; margin-top: 1rem; color: #005A9C; text-decoration: none; }
+/* Ajuste específico para telemóveis muito estreitos */
+@media (max-width: 480px) {
+  .login-form {
+    padding: 1.5rem; /* Reduz um pouco mais o padding interno no mobile */
+    width: 95%; /* Deixa uma pequena margem lateral */
+  }
+  
+  .login-container {
+    padding: 0.5rem; /* Quase sem padding no container pai */
+  }
+}
+
+.login-form h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #005A9C;
+  font-size: 1.5rem; /* Tamanho de fonte controlado */
+}
+
+.login-form .form-group {
+  margin-bottom: 1rem;
+  width: 100%; /* Garante que o grupo ocupe tudo */
+}
+
+.login-form .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.login-form .form-group input {
+  width: 100%; /* O input ocupa 100% do form-group */
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* CRÍTICO: Impede que o input estoure a caixa */
+}
+
+.login-form .btn-submit {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #005A9C;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.login-form .form-link {
+  display: block;
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #005A9C;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
 .login-form .form-error { color: #DC3545; text-align: center; margin-bottom: 1rem; }
 
 /* Dashboard Principal */
