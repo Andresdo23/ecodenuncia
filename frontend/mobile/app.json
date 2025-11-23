@@ -1,46 +1,51 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "EcoDenúncia",
+    "slug": "ecodenuncia-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff",
       "plugins": [
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "O EcoDenúncia precisa de acesso à sua galeria para que possa selecionar a foto da denúncia.",
-          "cameraPermission": "O EcoDenúncia precisa de acesso à sua câmara para que possa tirar a foto da denúncia."
-        }
-      ],
-      [
-        "expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "O EcoDenúncia precisa da sua localização para registar onde o lixo irregular se encontra."
-        }
+        [
+          "expo-image-picker",
+          {
+            "photosPermission": "O EcoDenúncia precisa de acesso à sua galeria para que possa selecionar a foto da denúncia.",
+            "cameraPermission": "O EcoDenúncia precisa de acesso à sua câmara para que possa tirar a foto da denúncia."
+          }
+        ],
+        [
+          "expo-location",
+          {
+            "locationAlwaysAndWhenInUsePermission": "O EcoDenúncia precisa da sua localização para registar onde o lixo irregular se encontra."
+          }
+        ]
       ]
-    ]
     },
-
-    
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ecodenuncia.mobile"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.ecodenuncia.mobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "65a3b658-eeb3-4075-8959-9370ace8288e"
+      }
     }
   }
 }

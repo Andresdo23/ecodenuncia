@@ -4,36 +4,40 @@ import api from '../services/api';
 // --- Importações do Mapa (Leaflet) ---
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import 'leaflet/dist/leaflet.css'; // O CSS é obrigatório
 
-// --- Ícones Coloridos (Baseado no seu protótipo) ---
-let DefaultIcon = L.icon({
-    iconUrl: icon,
+// ---
+// CONFIGURAÇÃO DE ÍCONES (CDN STABLE)
+// Definimos explicitamente todos os ícones para não depender do padrão quebrado do Leaflet
+// ---
+
+const iconShadow = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png';
+
+// Função geradora para não repetir código
+const createCustomIcon = (url) => {
+  return new L.Icon({
+    iconUrl: url,
     shadowUrl: iconShadow,
-    iconAnchor: [12, 41]
-});
-const redIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-});
-const yellowIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-yellow.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-});
-const greenIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-});
-// --- Fim dos Ícones ---
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+};
+
+// Criamos as instâncias dos ícones aqui fora para serem reutilizadas
+const ICONS = {
+  blue: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png'),
+  red: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png'),
+  gold: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png'),
+  green: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png'),
+  grey: createCustomIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png'),
+};
+
+// --- Fim da Configuração de Ícones ---
 
 
-// ---
-// NOVO: Componente Modal de Detalhes
-// ---
+// --- Componente Modal de Detalhes ---
 const DenunciaDetailModal = ({ denuncia, onClose }) => {
   if (!denuncia) return null;
 
@@ -62,12 +66,8 @@ const DenunciaDetailModal = ({ denuncia, onClose }) => {
   );
 };
 
-
-// ---
-// Componente da Tabela (Atualizado com "Descrição" e "onClick")
-// ---
+// --- Componente da Tabela ---
 const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
-  
   const statusOptions = [
     { id: 1, nome: "Recebida" },
     { id: 2, nome: "Em Análise" },
@@ -83,7 +83,6 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
     return '';
   };
 
-  // Função para truncar a descrição
   const truncarTexto = (texto, limite) => {
     if (!texto) return "N/A";
     if (texto.length <= limite) return texto;
@@ -110,7 +109,7 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
             return (
               <tr 
                 key={denuncia.id} 
-                onClick={() => onRowClick(denuncia)} // <-- Ação de clique na linha
+                onClick={() => onRowClick(denuncia)}
                 style={{ cursor: 'pointer' }}
               >
                 <td>#{denuncia.id.substring(0, 8)}...</td>
@@ -127,10 +126,10 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
                     className="status-select"
                     value={statusAtualId} 
                     onChange={(e) => {
-                      e.stopPropagation(); // Impede o modal de abrir ao mudar o status
+                      e.stopPropagation();
                       onStatusChange(denuncia.id, parseInt(e.target.value));
                     }}
-                    onClick={(e) => e.stopPropagation()} // Impede o modal
+                    onClick={(e) => e.stopPropagation()}
                     disabled={statusAtualId === 3}
                   >
                     {statusOptions.map(status => (
@@ -149,18 +148,13 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
   );
 };
 
-
-// ---
-// Componente Principal do Dashboard (Atualizado com estado do Modal)
-// ---
+// --- Componente Principal do Dashboard ---
 function Dashboard() {
   const [denuncias, setDenuncias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filtroStatus, setFiltroStatus] = useState('Todos');
-  
-  // --- Estado do Modal ---
-  const [modalDenuncia, setModalDenuncia] = useState(null); // Guarda a denúncia selecionada
+  const [modalDenuncia, setModalDenuncia] = useState(null);
 
   useEffect(() => {
     const fetchDenuncias = async () => {
@@ -214,23 +208,22 @@ function Dashboard() {
     return { denunciasFiltradas: filtradas, contagens };
   }, [denuncias, filtroStatus]);
   
+  // Função Simples e Direta para ícones
   const getIconeDoMapa = (nomeStatus) => {
-    if (nomeStatus === 'Recebida') return redIcon;
-    if (nomeStatus === 'Em Análise') return yellowIcon;
-    if (nomeStatus === 'Resolvida') return greenIcon;
-    return DefaultIcon;
+    if (nomeStatus === 'Recebida') return ICONS.red;
+    if (nomeStatus === 'Em Análise') return ICONS.gold; // Alterado para gold (amarelo)
+    if (nomeStatus === 'Resolvida') return ICONS.green;
+    if (nomeStatus === 'Rejeitada') return ICONS.grey;
+    return ICONS.blue; // Fallback
   };
-
 
   return (
     <>
-      {/* 1. O MODAL (fica fora do layout principal) */}
       <DenunciaDetailModal 
         denuncia={modalDenuncia} 
         onClose={() => setModalDenuncia(null)} 
       />
     
-      {/* 2. O DASHBOARD */}
       <div className="dashboard-container">
         {/* MAPA */}
         {loading && <p>A carregar mapa...</p>}
@@ -256,8 +249,6 @@ function Dashboard() {
                     <strong>Status: {denuncia.nome_status}</strong><br />
                     <hr />
                     <strong>Descrição:</strong> {denuncia.descricao || "N/A"}<br />
-                    <strong>Endereço:</strong> {denuncia.endereco_completo || "N/A"}<br />
-                    <strong>Referência:</strong> {denuncia.ponto_referencia || "N/A"}<br />
                     <a href={denuncia.url_foto} target="_blank" rel="noopener noreferrer">
                       Ver Foto
                     </a>
@@ -268,35 +259,13 @@ function Dashboard() {
           </div>
         )}
 
-        {/* FILTROS */}
         <div className="filter-bar">
-          <button 
-            className={`filter-btn ${filtroStatus === 'Todos' ? 'active' : ''}`}
-            onClick={() => setFiltroStatus('Todos')}
-          >
-            Todos
-          </button>
-          <button 
-            className={`filter-btn ${filtroStatus === 'Pendente' ? 'active' : ''}`}
-            onClick={() => setFiltroStatus('Pendente')}
-          >
-            Pendentes (Recebidas)
-          </button>
-          <button 
-            className={`filter-btn ${filtroStatus === 'Em Andamento' ? 'active' : ''}`}
-            onClick={() => setFiltroStatus('Em Andamento')}
-          >
-            Em Andamento (Em Análise)
-          </button>
-          <button 
-            className={`filter-btn ${filtroStatus === 'Resolvido' ? 'active' : ''}`}
-            onClick={() => setFiltroStatus('Resolvido')}
-          >
-            Resolvidas
-          </button>
+          <button className={`filter-btn ${filtroStatus === 'Todos' ? 'active' : ''}`} onClick={() => setFiltroStatus('Todos')}>Todos</button>
+          <button className={`filter-btn ${filtroStatus === 'Pendente' ? 'active' : ''}`} onClick={() => setFiltroStatus('Pendente')}>Pendentes (Recebidas)</button>
+          <button className={`filter-btn ${filtroStatus === 'Em Andamento' ? 'active' : ''}`} onClick={() => setFiltroStatus('Em Andamento')}>Em Andamento (Em Análise)</button>
+          <button className={`filter-btn ${filtroStatus === 'Resolvido' ? 'active' : ''}`} onClick={() => setFiltroStatus('Resolvido')}>Resolvidas</button>
         </div>
 
-        {/* CARTÕES DE RESUMO */}
         <div className="summary-cards">
           <div className="summary-card total">
             <h3>Total</h3>
@@ -316,13 +285,12 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* TABELA DE DENÚNCIAS */}
         {loading && <p>A carregar denúncias...</p>}
         {!loading && !error && (
           <DenunciasTable 
             denuncias={denunciasFiltradas} 
             onStatusChange={handleStatusChange}
-            onRowClick={(denuncia) => setModalDenuncia(denuncia)} // Passa a função para abrir o modal
+            onRowClick={(denuncia) => setModalDenuncia(denuncia)}
           />
         )}
       </div>

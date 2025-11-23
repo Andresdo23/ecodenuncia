@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   // O endereço onde seu backend (Node.js) está rodando
-  baseURL: 'http://localhost:3001/api' 
+  baseURL: 'https://ecodenuncia.onrender.com/api' 
 });
 
 // MELHORIA: Interceptor para adicionar o token JWT
