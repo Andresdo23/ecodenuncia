@@ -1,4 +1,4 @@
-# Arquitetura do Sistema - EcoDenúncia (Imp
+# Arquitetura do Sistema - EcoDenúncia
 
 ## Visão Geral
 O EcoDenúncia foi implementado seguindo uma arquitetura **Cliente-Servidor** baseada em API RESTful. A solução é composta por três grandes blocos: o Aplicativo Móvel (Cliente Cidadão), o Dashboard Web (Cliente Gestor) e o Servidor Backend (API e Dados).
@@ -29,7 +29,7 @@ graph TD
         A -->|Câmera| G["Expo Image Picker"]
         B -->|Mapas| H["OpenStreetMap / Leaflet"]
     end
-<<<<<<< HEAD
+
 
 ## Componentes e Tecnologias Implementadas
 
@@ -98,5 +98,4 @@ Deploy no Render: Substituição do Heroku (planejado) pelo Render devido ao fim
 Storage Integrado: Substituição do AWS S3/Cloudinary pelo Supabase Storage. Justificativa: Redução de complexidade e latência, mantendo dados e arquivos no mesmo ecossistema de infraestrutura.
 
 Mapas OpenSource: Utilização do OpenStreetMap (via Leaflet) ao invés do Google Maps API. Justificativa: Evitar custos de API e simplificar a configuração sem necessidade de cartão de crédito para o projeto acadêmico.
-=======
->>>>>>> 0656e2367469dc45743b3f1c6e1bbaaed06fb56a
+
