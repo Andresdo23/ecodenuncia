@@ -145,14 +145,10 @@ app.post('/api/auth/login', async (req, res) => {
   }
 
   try {
-    // ---
-    // ATUALIZAÇÃO: Adicionado "AND is_ativo = true"
-    // ---
     const query = 'SELECT * FROM USUARIO WHERE email = $1 AND is_ativo = true';
     const result = await pool.query(query, [email]);
 
     if (result.rows.length === 0) {
-      // Retorna "Credenciais inválidas" mesmo se o e-mail existir mas estiver inativo (segurança)
       return res.status(401).json({ 
         success: false, 
         error: 'Credenciais inválidas.'
@@ -248,22 +244,25 @@ app.put('/api/users/me', auth, async (req, res) => {
 // ---
 app.post('/api/denuncias', auth, async (req, res) => {
   const { 
-    descricao, url_foto, latitude, longitude, titulo, data_ocorrencia,
+    descricao, url_foto, latitude, longitude, data_ocorrencia, // 'titulo' removido
     endereco_completo, ponto_referencia
   } = req.body;
   const id_usuario = req.usuario.id;
+
   if (!url_foto || !latitude || !longitude) {
     return res.status(400).json({ success: false, error: 'Campos obrigatórios ausentes: url_foto, latitude e longitude.' });
   }
   const dataOcorrenciaFinal = data_ocorrencia ? new Date(data_ocorrencia) : new Date();
+  
   try {
+    // CORREÇÃO: 'titulo' removido da query e dos values
     const query = `
       INSERT INTO DENUNCIA 
-        (id_usuario, descricao, url_foto, latitude, longitude, titulo, data_ocorrencia, endereco_completo, ponto_referencia)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *; 
+        (id_usuario, descricao, url_foto, latitude, longitude, data_ocorrencia, endereco_completo, ponto_referencia)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *; 
     `;
     const values = [
-      id_usuario, descricao, url_foto, latitude, longitude, titulo, 
+      id_usuario, descricao, url_foto, latitude, longitude, 
       dataOcorrenciaFinal, endereco_completo, ponto_referencia
     ];
     const result = await pool.query(query, values);
@@ -279,8 +278,10 @@ app.post('/api/denuncias', auth, async (req, res) => {
 // ---
 app.get('/api/denuncias', auth, async (req, res) => {
   const { id: id_usuario, tipo_usuario } = req.usuario;
+  
+  // CORREÇÃO: 'd.titulo' removido do SELECT
   let query = `
-    SELECT d.id, d.titulo, d.descricao, d.url_foto, d.latitude, d.longitude, 
+    SELECT d.id, d.descricao, d.url_foto, d.latitude, d.longitude, 
            d.data_ocorrencia, d.data_criacao, s.nome_status, d.endereco_completo,
            d.ponto_referencia, d.id_usuario
     FROM DENUNCIA d
