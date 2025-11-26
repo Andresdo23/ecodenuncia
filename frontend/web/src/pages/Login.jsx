@@ -33,6 +33,39 @@ function Login() {
     }
   };
 
+  // --- ESTILOS EM LINHA (Garantia de funcionamento) ---
+  const styles = {
+    passwordWrapper: {
+      position: 'relative', // Essencial
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
+    },
+    input: {
+      width: '100%',
+      padding: '0.75rem',
+      paddingRight: '70px', // Espaço para o botão
+      fontSize: '1rem',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      boxSizing: 'border-box' // Garante que o padding não estoure
+    },
+    toggleBtn: {
+      position: 'absolute', // Flutua sobre o input
+      right: '10px', // Encostado à direita
+      top: '50%',
+      transform: 'translateY(-50%)', // Centraliza verticalmente
+      background: 'none',
+      border: 'none',
+      color: '#005A9C',
+      fontWeight: 'bold',
+      fontSize: '0.9rem',
+      cursor: 'pointer',
+      zIndex: 10,
+      padding: '5px'
+    }
+  };
+
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
@@ -40,12 +73,24 @@ function Login() {
         
         <div className="form-group">
           <label htmlFor="email">Email:</label>
-          <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="ex: gestor@ecodenuncia.com" />
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="ex: gestor@ecodenuncia.com"
+            // Aplicamos o estilo base aqui também para consistência, 
+            // mas sem o paddingRight extra
+            style={{...styles.input, paddingRight: '0.75rem'}} 
+          />
         </div>
         
         <div className="form-group">
           <label htmlFor="senha">Senha:</label>
-          <div className="password-container">
+          
+          {/* Container com estilo relativo forçado */}
+          <div style={styles.passwordWrapper}>
             <input
               type={mostrarSenha ? "text" : "password"}
               id="senha"
@@ -53,11 +98,12 @@ function Login() {
               onChange={(e) => setSenha(e.target.value)}
               required
               placeholder="Digite sua senha"
+              style={styles.input} // Estilo do input
             />
             <button 
               type="button"
-              className="btn-toggle-password"
               onClick={() => setMostrarSenha(!mostrarSenha)}
+              style={styles.toggleBtn} // Estilo do botão absoluto
             >
               {mostrarSenha ? 'Ocultar' : 'Ver'}
             </button>
@@ -68,7 +114,9 @@ function Login() {
 
         <button type="submit" className="btn-submit">Entrar</button>
         
-        <Link to="/cadastro-gestor" className="form-link">Criar conta de Gestor (requer chave)</Link>
+        <Link to="/cadastro-gestor" className="form-link">
+          Criar conta de Gestor (requer chave)
+        </Link>
       </form>
     </div>
   );
