@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const API_URL = 'https://ecodenuncia.onrender.com/api';
+// URL Fixa do Render (Produção)
+const API_URL = 'https://ecodenuncia-api.onrender.com/api';
 
 function CadastroGestor() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function CadastroGestor() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   
-  // Um único estado controla ambos os campos
+  // Estado único para controlar ambas as senhas
   const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -58,6 +59,39 @@ function CadastroGestor() {
     }
   };
 
+  // --- ESTILOS EM LINHA (Garantia de funcionamento) ---
+  const styles = {
+    passwordWrapper: {
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
+    },
+    input: {
+      width: '100%',
+      padding: '0.75rem',
+      paddingRight: '70px', // Espaço para o botão
+      fontSize: '1rem',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      boxSizing: 'border-box'
+    },
+    toggleBtn: {
+      position: 'absolute',
+      right: '10px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      background: 'none',
+      border: 'none',
+      color: '#005A9C',
+      fontWeight: 'bold',
+      fontSize: '0.9rem',
+      cursor: 'pointer',
+      zIndex: 10,
+      padding: '5px'
+    }
+  };
+
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
@@ -65,17 +99,37 @@ function CadastroGestor() {
         
         <div className="form-group">
           <label htmlFor="nome">Nome Completo:</label>
-          <input type="text" id="nome" value={nome} onChange={(e) => setNome(e.target.value)} required placeholder="Seu nome" />
+          <input
+            type="text"
+            id="nome"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+            required
+            placeholder="Seu nome"
+            // Reutilizamos o estilo do input, mas ajustamos o paddingRight 
+            // pois este campo não tem botão
+            style={{...styles.input, paddingRight: '0.75rem'}}
+          />
         </div>
 
         <div className="form-group">
           <label htmlFor="email">Email:</label>
-          <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="ex: gestor@prefeitura.gov.br" />
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="ex: gestor@prefeitura.gov.br"
+            style={{...styles.input, paddingRight: '0.75rem'}}
+          />
         </div>
 
         <div className="form-group">
           <label htmlFor="senha">Senha:</label>
-          <div className="password-container">
+          
+          {/* Wrapper Relativo */}
+          <div style={styles.passwordWrapper}>
             <input
               type={mostrarSenha ? "text" : "password"}
               id="senha"
@@ -83,11 +137,12 @@ function CadastroGestor() {
               onChange={(e) => setSenha(e.target.value)}
               required
               placeholder="Mínimo 6 caracteres"
+              style={styles.input} // Estilo do input
             />
-            {/* Botão ÚNICO que controla tudo */}
+            {/* Botão Absoluto (Controla tudo) */}
             <button 
               type="button" 
-              className="btn-toggle-password"
+              style={styles.toggleBtn}
               onClick={() => setMostrarSenha(!mostrarSenha)}
             >
               {mostrarSenha ? 'Ocultar' : 'Ver'}
@@ -97,23 +152,33 @@ function CadastroGestor() {
 
         <div className="form-group">
           <label htmlFor="confirmarSenha">Confirmar Senha:</label>
-          <div className="password-container">
+          
+          {/* Wrapper Relativo (mesmo sem botão, para manter o estilo do input igual) */}
+          <div style={styles.passwordWrapper}>
             <input
-              // Usa o MESMO estado para mostrar/ocultar
-              type={mostrarSenha ? "text" : "password"}
+              type={mostrarSenha ? "text" : "password"} // Controlado pelo mesmo estado
               id="confirmarSenha"
               value={confirmarSenha}
               onChange={(e) => setConfirmarSenha(e.target.value)}
               required
               placeholder="Repita a senha"
+              style={styles.input}
             />
-            {/* SEM BOTÃO AQUI (O de cima já controla este) */}
+            {/* Sem botão aqui, o de cima já resolve */}
           </div>
         </div>
 
         <div className="form-group">
           <label htmlFor="chave">Chave Secreta:</label>
-          <input type="password" id="chave" value={chaveSecreta} onChange={(e) => setChaveSecreta(e.target.value)} required placeholder="Chave de administrador" />
+          <input
+            type="password"
+            id="chave"
+            value={chaveSecreta}
+            onChange={(e) => setChaveSecreta(e.target.value)}
+            required
+            placeholder="Chave de administrador"
+            style={{...styles.input, paddingRight: '0.75rem'}}
+          />
         </div>
         
         {error && <p className="form-error">{error}</p>}
