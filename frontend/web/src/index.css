@@ -325,7 +325,7 @@ body {
 .password-container input {
   width: 100%;
   padding: 0.75rem;
-  padding-right: 70px; /* Espaço para o botão não ficar em cima do texto */
+  padding-right: 60px; /* Espaço para o botão não ficar em cima do texto */
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
