@@ -32,7 +32,6 @@ graph TD
 
 
 ## Componentes e Tecnologias Implementadas
-
 1. Backend (API REST)
 Tecnologia: Node.js com framework Express.js.
 
@@ -97,5 +96,5 @@ Deploy no Render: Substituição do Heroku (planejado) pelo Render devido ao fim
 
 Storage Integrado: Substituição do AWS S3/Cloudinary pelo Supabase Storage. Justificativa: Redução de complexidade e latência, mantendo dados e arquivos no mesmo ecossistema de infraestrutura.
 
-Mapas OpenSource: Utilização do OpenStreetMap (via Leaflet) ao invés do Google Maps API. Justificativa: Evitar custos de API e simplificar a configuração sem necessidade de cartão de crédito para o projeto acadêmico.
+Mapas OpenSource: Utilização do OpenStreetMap (via Leaflet) ao invés do Google Maps API. Justificativa: Evitar custos de API e simplificar a configuração sem necessidade de cartão de crédito para o projeto acadêmico..
 
