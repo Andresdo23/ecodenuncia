@@ -29,7 +29,7 @@ graph TD
         A -->|Câmera| G["Expo Image Picker"]
         B -->|Mapas| H["OpenStreetMap / Leaflet"]
     end
-
+'''
 
 ## Componentes e Tecnologias Implementadas
 
