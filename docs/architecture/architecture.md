@@ -5,32 +5,6 @@ O EcoDenúncia foi implementado seguindo uma arquitetura **Cliente-Servidor** ba
 
 A infraestrutura foi implantada inteiramente na nuvem para garantir acessibilidade pública e testes reais.
 
-## Diagrama de Arquitetura
-
-```mermaid
-graph TD
-    subgraph Clientes
-        A["App Mobile (React Native/Expo)"] -->|HTTPS/JSON| C("API Gateway - Render")
-        B["Web Dashboard (React.js)"] -->|HTTPS/JSON| C
-    end
-
-    subgraph "Backend - Render Cloud"
-        C -->|"Autenticação JWT"| C1["Middleware Auth"]
-        C -->|"Lógica de Negócio"| C2["Controllers"]
-    end
-
-    subgraph "Dados e Storage - Supabase"
-        C2 -->|"Query SQL"| D[("PostgreSQL Database")]
-        C2 -->|"Upload/Download"| E["Object Storage (Imagens)"]
-    end
-
-    subgraph "Serviços Externos"
-        A -->|GPS| F["Expo Location Services"]
-        A -->|Câmera| G["Expo Image Picker"]
-        B -->|Mapas| H["OpenStreetMap / Leaflet"]
-    end
-'''
-
 ## Componentes e Tecnologias Implementadas
 
 1. Backend (API REST)
@@ -97,5 +71,30 @@ Deploy no Render: Substituição do Heroku (planejado) pelo Render devido ao fim
 
 Storage Integrado: Substituição do AWS S3/Cloudinary pelo Supabase Storage. Justificativa: Redução de complexidade e latência, mantendo dados e arquivos no mesmo ecossistema de infraestrutura.
 
-Mapas OpenSource: Utilização do OpenStreetMap (via Leaflet) ao invés do Google Maps API. Justificativa: Evitar custos de API e simplificar a configuração sem necessidade de cartão de crédito para o projeto acadêmico..
+Mapas OpenSource: Utilização do OpenStreetMap (via Leaflet) ao invés do Google Maps API. Justificativa: Evitar custos de API e simplificar a configuração sem necessidade de cartão de crédito para o projeto acadêmico.
+
+## Diagrama de Arquitetura
+
+```mermaid
+graph TD
+    subgraph Clientes
+        A["App Mobile (React Native/Expo)"] -->|HTTPS/JSON| C("API Gateway - Render")
+        B["Web Dashboard (React.js)"] -->|HTTPS/JSON| C
+    end
+
+    subgraph "Backend - Render Cloud"
+        C -->|"Autenticação JWT"| C1["Middleware Auth"]
+        C -->|"Lógica de Negócio"| C2["Controllers"]
+    end
+
+    subgraph "Dados e Storage - Supabase"
+        C2 -->|"Query SQL"| D[("PostgreSQL Database")]
+        C2 -->|"Upload/Download"| E["Object Storage (Imagens)"]
+    end
+
+    subgraph "Serviços Externos"
+        A -->|GPS| F["Expo Location Services"]
+        A -->|Câmera| G["Expo Image Picker"]
+        B -->|Mapas| H["OpenStreetMap / Leaflet"]
+    end
 
