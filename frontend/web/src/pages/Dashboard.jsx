@@ -22,10 +22,7 @@ const createIcon = (url) => {
 const blueIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png');
 const redIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png');
 const yellowIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png');
-
-// ALTERAÇÃO: Usando uma URL alternativa para o verde, para forçar a atualização do cache
 const greenIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png?v=2'); 
-
 const greyIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png');
 // --- FIM CORREÇÃO ---
 
@@ -119,13 +116,27 @@ function Dashboard() {
       .finally(() => setLoading(false));
   }, []);
 
+  // --- CORREÇÃO AQUI: Atualização Otimista do Status ---
   const handleStatusChange = async (id, statusId) => {
     try {
-      const res = await api.put(`/denuncias/${id}/status`, { id_status: statusId });
-      const updated = res.data.data;
-      setDenuncias(prev => prev.map(d => d.id === id ? { ...d, nome_status: updated.nome_status } : d));
+      // 1. Envia para o backend
+      await api.put(`/denuncias/${id}/status`, { id_status: statusId });
+      
+      // 2. Mapeia o ID para o Nome localmente (para a UI atualizar na hora)
+      const statusMap = {
+        1: "Recebida",
+        2: "Em Análise",
+        3: "Resolvida",
+        4: "Rejeitada"
+      };
+      const novoNome = statusMap[statusId];
+
+      // 3. Atualiza o estado
+      setDenuncias(prev => prev.map(d => d.id === id ? { ...d, nome_status: novoNome } : d));
+      
     } catch (err) { alert("Erro ao atualizar status."); }
   };
+  // -----------------------------------------------------
 
   const { filtradas, contagens } = useMemo(() => {
     let list = denuncias;
