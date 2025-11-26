@@ -1,4 +1,4 @@
-# Arquitetura do Sistema - EcoDenúncia (Implementação Final)
+# Arquitetura do Sistema - EcoDenúncia (Imp
 
 ## Visão Geral
 O EcoDenúncia foi implementado seguindo uma arquitetura **Cliente-Servidor** baseada em API RESTful. A solução é composta por três grandes blocos: o Aplicativo Móvel (Cliente Cidadão), o Dashboard Web (Cliente Gestor) e o Servidor Backend (API e Dados).
