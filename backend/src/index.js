@@ -19,9 +19,17 @@ const multer = require('multer');
 // Configuração do Multer
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Configuração inicial do Express
 const app = express();
-app.use(cors());
+
+// --- CORREÇÃO DE CORS ---
+// Permite explicitamente o nosso cabeçalho personalizado 'x-admin-secret'
+app.use(cors({
+  origin: '*', // Permite acesso de qualquer lugar (Vercel, Mobile, etc.)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-secret']
+}));
+// -----------------------
+
 app.use(express.json());
 
 // ---
