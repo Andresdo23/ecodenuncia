@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 // URL Fixa do Render (Produção)
-const API_URL = 'https://ecodenuncia-api.onrender.com/api';
+const API_URL = 'https://ecodenuncia.onrender.com/api';
 
 function CadastroGestor() {
   const navigate = useNavigate();
