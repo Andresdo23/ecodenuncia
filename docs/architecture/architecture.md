@@ -32,6 +32,7 @@ graph TD
 
 
 ## Componentes e Tecnologias Implementadas
+
 1. Backend (API REST)
 Tecnologia: Node.js com framework Express.js.
 
