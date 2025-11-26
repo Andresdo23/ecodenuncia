@@ -69,7 +69,7 @@ O sistema segue uma arquitetura **Cliente-Servidor** baseada em API RESTful.
 2.  Instale as dependências: `npm install`
 3.  Execute o projeto: `npm run dev`
 4.  Acesse `http://localhost:5173` no navegador.
-   *(Login de teste Gestor: gestor@ecodenuncia.com / senha123)*
+   *(Login de teste Gestor: gestor@gmail.com / gestor123)*
 
 ### Passo 3: Execução do App Mobile (Cidadão)
 1.  Entre na pasta mobile: `cd frontend/mobile`
@@ -84,12 +84,12 @@ O sistema segue uma arquitetura **Cliente-Servidor** baseada em API RESTful.
 O sistema foi implantado em ambiente de produção para validação:
 
 * **API Backend:** `https://ecodenuncia.onrender.com`
-* **Dashboard Web:** *(Insira aqui o link do Vercel se tiver, ou mantenha "Rodar Localmente")*
+* **Dashboard Web:** 'https://ecodenuncia-peach.vercel.app/login'
 * **App Android (APK):** [Link para Download do APK](https://expo.dev/artifacts/eas/uXtaKt6foSYL2HbgkUSgXM.apk) *(Substitua pelo link final do seu build)*
 
 **Credenciais de Teste (Gestor):**
-* **E-mail:** `gestor@ecodenuncia.com`
-* **Senha:** `senha123`
+* **E-mail:** `gestor@gmail.com`
+* **Senha:** `gestor123`
 
 ---
 
