@@ -3,7 +3,7 @@
 Esta documentação descreve os endpoints implementados na API RESTful do sistema EcoDenúncia. A API foi desenvolvida em Node.js com Express e utiliza PostgreSQL (Supabase) para persistência de dados.
 
 ## 🌐 Base URL
-* **Produção:** `https://ecodenuncia-api.onrender.com/api`
+* **Produção:** `https://ecodenuncia.onrender.com/api`
 * **Desenvolvimento:** `http://localhost:3001/api`
 
 ## 🔐 Autenticação

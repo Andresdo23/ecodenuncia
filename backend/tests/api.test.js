@@ -23,4 +23,13 @@ describe('Testes Básicos da API EcoDenúncia', () => {
     expect(response.statusCode).toBe(400); // Bad Request
   });
 
+  test('GET /api/denuncias sem token deve retornar 401 (Unauthorized)', async () => {
+    // Tenta acessar uma rota protegida sem enviar o cabeçalho Authorization
+    const response = await request(API_URL).get('/api/denuncias');
+    
+    // Esperamos que a API recuse e retorne erro 401
+    expect(response.statusCode).toBe(401);
+    expect(response.body).toHaveProperty('success', false);
+  });
+
 });

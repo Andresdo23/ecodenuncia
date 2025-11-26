@@ -60,7 +60,7 @@ O sistema segue uma arquitetura **Cliente-Servidor** baseada em API RESTful.
 ### Passo 1: Configuração do Backend
 1.  Entre na pasta do backend: `cd backend`
 2.  Instale as dependências: `npm install`
-3.  Crie um arquivo `.env` na raiz de `backend/` com as credenciais do banco (vermelho no PDF entregue ou solicitar ao administrador).
+3.  Crie um arquivo `.env` na raiz de `backend/` com as credenciais do banco
 4.  Execute o servidor: `node src/index.js`
    *(O servidor rodará em http://localhost:3001)*
 
@@ -69,7 +69,7 @@ O sistema segue uma arquitetura **Cliente-Servidor** baseada em API RESTful.
 2.  Instale as dependências: `npm install`
 3.  Execute o projeto: `npm run dev`
 4.  Acesse `http://localhost:5173` no navegador.
-   *(Login de teste Gestor: gestor@gmail.com / gestor123)*
+   *(Login de teste Gestor: gestor@ecodenuncia.com / gestor123)*
 
 ### Passo 3: Execução do App Mobile (Cidadão)
 1.  Entre na pasta mobile: `cd frontend/mobile`
@@ -84,12 +84,15 @@ O sistema segue uma arquitetura **Cliente-Servidor** baseada em API RESTful.
 O sistema foi implantado em ambiente de produção para validação:
 
 * **API Backend:** `https://ecodenuncia.onrender.com`
-* **Dashboard Web:** 'https://ecodenuncia-peach.vercel.app/login'
-* **App Android (APK):** [Link para Download do APK](https://expo.dev/artifacts/eas/uXtaKt6foSYL2HbgkUSgXM.apk) *(Substitua pelo link final do seu build)*
+* **Dashboard Web:** `https://ecodenuncia-peach.vercel.app/login`
+* **App Android (APK):** `https://expo.dev/artifacts/eas/kxs59BGJjyg4uipgZ6TZqH.apk`
 
 **Credenciais de Teste (Gestor):**
-* **E-mail:** `gestor@gmail.com`
+* **E-mail:** `gestor@ecodenuncia.com`
 * **Senha:** `gestor123`
+
+**Criar Conta (Gestor):**
+* **Chave Secreta:** `chave_ecodenuncia_2025`
 
 ---
 
