@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Para o logout
+import { useAuth } from '../context/AuthContext';
 
 function Header() {
   const { usuario, logout } = useAuth();
@@ -11,7 +11,7 @@ function Header() {
         EcoDenúncia
       </div>
       <nav className="header-nav">
-        {/* Estes links podem ser páginas estáticas no futuro */}
+        {/* Links para páginas no futuro */}
         <Link to="/">Sobre</Link>
         <Link to="/">Contato</Link>
         

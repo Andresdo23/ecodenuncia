@@ -30,7 +30,7 @@ Cria uma nova conta de cidadão ou gestor.
       "tipo_usuario": "cidadao", // ou "gestor"
       "cpf": "123.456.789-00",
       "telefone": "(85) 99999-8888",
-      "data_nascimento": "17/07/1990" // Formato DD/MM/AAAA
+      "data_nascimento": "17/07/1990"
     }
     ```
 * **Resposta (201 Created):**

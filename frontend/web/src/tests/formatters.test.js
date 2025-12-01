@@ -13,6 +13,5 @@ test('truncarTexto não deve alterar textos curtos', () => {
 test('truncarTexto deve adicionar reticências em textos longos', () => {
   const texto = "Este texto é muito longo para caber na tabela";
   const limite = 10;
-  // Esperamos os primeiros 10 chars + "..."
   expect(truncarTexto(texto, limite)).toBe("Este texto...");
 });

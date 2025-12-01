@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import api from '../services/api';
 import { useNavigate, Link } from 'react-router-dom';
+import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 function Login() {
@@ -11,32 +11,35 @@ function Login() {
   const [senha, setSenha] = useState('');
   const [error, setError] = useState(null);
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setLoading(true);
+
     try {
       const response = await api.post('/auth/login', { email, senha });
       const { token, usuario } = response.data.data;
+
       if (usuario.tipo_usuario !== 'gestor') {
         setError('Acesso negado. Este painel é exclusivo para gestores.');
+        setLoading(false);
         return;
       }
+
       login(token, usuario);
       navigate('/');
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.error) {
-        setError(err.response.data.error);
-      } else {
-        setError('Erro ao conectar ao servidor. Tente novamente.');
-      }
+      const msg = err.response?.data?.error || 'Erro ao conectar ao servidor. Tente novamente.';
+      setError(msg);
+      setLoading(false);
     }
   };
 
-  // --- ESTILOS EM LINHA (Garantia de funcionamento) ---
   const styles = {
     passwordWrapper: {
-      position: 'relative', // Essencial
+      position: 'relative',
       display: 'flex',
       alignItems: 'center',
       width: '100%',
@@ -44,17 +47,17 @@ function Login() {
     input: {
       width: '100%',
       padding: '0.75rem',
-      paddingRight: '70px', // Espaço para o botão
+      paddingRight: '70px',
       fontSize: '1rem',
       border: '1px solid #ccc',
       borderRadius: '4px',
-      boxSizing: 'border-box' // Garante que o padding não estoure
+      boxSizing: 'border-box'
     },
     toggleBtn: {
-      position: 'absolute', // Flutua sobre o input
-      right: '10px', // Encostado à direita
+      position: 'absolute',
+      right: '10px',
       top: '50%',
-      transform: 'translateY(-50%)', // Centraliza verticalmente
+      transform: 'translateY(-50%)',
       background: 'none',
       border: 'none',
       color: '#005A9C',
@@ -80,16 +83,12 @@ function Login() {
             onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="ex: gestor@ecodenuncia.com"
-            // Aplicamos o estilo base aqui também para consistência, 
-            // mas sem o paddingRight extra
             style={{...styles.input, paddingRight: '0.75rem'}} 
           />
         </div>
         
         <div className="form-group">
           <label htmlFor="senha">Senha:</label>
-          
-          {/* Container com estilo relativo forçado */}
           <div style={styles.passwordWrapper}>
             <input
               type={mostrarSenha ? "text" : "password"}
@@ -98,12 +97,12 @@ function Login() {
               onChange={(e) => setSenha(e.target.value)}
               required
               placeholder="Digite sua senha"
-              style={styles.input} // Estilo do input
+              style={styles.input}
             />
             <button 
               type="button"
               onClick={() => setMostrarSenha(!mostrarSenha)}
-              style={styles.toggleBtn} // Estilo do botão absoluto
+              style={styles.toggleBtn}
             >
               {mostrarSenha ? 'Ocultar' : 'Ver'}
             </button>
@@ -112,7 +111,9 @@ function Login() {
         
         {error && <p className="form-error">{error}</p>}
 
-        <button type="submit" className="btn-submit">Entrar</button>
+        <button type="submit" className="btn-submit" disabled={loading}>
+          {loading ? 'Entrando...' : 'Entrar'}
+        </button>
         
         <Link to="/cadastro-gestor" className="form-link">
           Criar conta de Gestor (requer chave)

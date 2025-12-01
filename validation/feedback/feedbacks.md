@@ -1,34 +1,39 @@
 # Registro de Feedbacks - Validação EcoDenúncia
 
-Este documento compila os feedbacks qualitativos recolhidos durante a sessão de validação com a **Associação de Moradores do Bairro Jardim América** em 23/11/2025.
+Este documento compila os feedbacks qualitativos recolhidos durante a sessão de validação com a **Grupos de Jovens e Adolescentes denominados Desbravadores do Bairro Siqueira e moradores da cidade de fortaleza** em 23/11/2025.
 
 ---
 
 ## 1. Feedbacks dos Cidadãos (App Mobile)
 
-### 👤 Participante: Ana Clara (Moradora, 45 anos)
+### 👤 Participante: Sarah Vitória (Moradora do Bairro Siqueira, 26 anos)
 > **Comentário:** *"O aplicativo é muito bonito e rápido, mas tive muita dificuldade na hora de criar a senha. Como os pontinhos escondem tudo, eu errei a confirmação duas vezes e tive que digitar tudo de novo. Seria bom se desse para ver o que estou escrevendo."*
 >
 > **Status:** 🔴 Crítico
 > **Ação Tomada:** Implementação do botão com ícone de "olho" (Ver/Ocultar) em todos os campos de senha (Login, Cadastro e Alteração de Senha).
 
-### 👤 Participante: Roberto Lima (Estudante, 22 anos)
-> **Comentário:** *"Fiz uma denúncia e o Sr. Carlos mudou o status lá no computador dele para 'Em Análise'. Eu fiquei olhando para a tela do meu celular esperando mudar a cor, mas não mudava. Tive que fechar o app e abrir de novo para ver a mudança. É meio chato isso."*
+### 👤 Participante: Iranildo Rodrigues (Estudante, 22 anos)
+> **Comentário:** *"Fiz uma denúncia e o rapaz que estava me entrevistando mudou o status lá no computador dele para 'Em Análise'. Eu fiquei olhando para a tela do meu celular esperando mudar a cor, mas não mudava. Tive que fechar o app e abrir de novo para ver a mudança. É meio chato isso."*
 >
 > **Status:** 🟡 Melhoria de Usabilidade
 > **Ação Tomada:** Implementação da funcionalidade "Pull-to-Refresh" (Puxar para Atualizar) na tela de histórico, permitindo atualização manual sem reiniciar o app.
 
-### 👤 Participante: Dona Maria (Aposentada, 62 anos)
+### 👤 Participante: Teresa Maria (Aposentada, 62 anos)
 > **Comentário:** *"Eu gostei que dá para tirar a foto na hora. Mas aqueles botões de 'Voltar' lá em cima eram muito pequenininhos, meu dedo às vezes não clicava direito."*
 >
-> **Status:** 🟡 Melhoria de Interface
-> **Ação Tomada:** Aumentámos a área de toque dos botões de navegação e substituímos o ícone fino por um texto "‹ Voltar" mais robusto e visível.
+> **Status:** 🔴 Crítico
+> **Ação Tomada:** Aumentamos a área de toque dos botões de navegação e substituímos o ícone fino por um texto "‹ Voltar" mais robusto e visível.
 
+### 👤 Participante: Davylla Faustino (Estudante, 14 anos)
+> **Comentário:** *"Eu gostei do aplicativo. Seria legal se eu pudessse escolher a foto da minha galeria sem precisar tirar a foto na hora, pois nem sempre tenho internet na rua"*
+>
+> **Status:** 🟡 Melhoria de Funcionalidade
+> **Ação Tomada:** Incluímos a nova funcionalidade com um botão "Escolher da Galeria"
 ---
 
 ## 2. Feedbacks da Gestão (Dashboard Web)
 
-### 👤 Participante: Sr. Carlos Mendes (Presidente da Associação)
+### 👤 Participante: Lucas Matheus (Diretor do Clube de Desbravadores, 27 anos)
 > **Comentário:** *"O mapa é excelente, ver as cores mudando de vermelho para verde dá uma satisfação enorme. Mas tenho uma preocupação: o GPS do celular às vezes falha por uns metros. Se o pino cair no meio do quarteirão e não tiver o endereço escrito, a equipe de limpeza pode não achar o lixo."*
 >
 > **Status:** 🔴 Crítico (Regra de Negócio)
@@ -45,8 +50,9 @@ Este documento compila os feedbacks qualitativos recolhidos durante a sessão de
 
 | Funcionalidade | Origem do Feedback | Estado Atual |
 | :--- | :--- | :--- |
-| **Ver/Ocultar Senha** | Dificuldade de digitação (Ana Clara) | ✅ Implementado |
-| **Pull-to-Refresh** | Falta de atualização em tempo real (Roberto) | ✅ Implementado |
-| **Endereço Obrigatório** | Imprecisão do GPS (Sr. Carlos) | ✅ Implementado |
-| **Botões Maiores** | Acessibilidade (Dona Maria) | ✅ Implementado |
-| **Visualização de Endereço na Tabela** | Agilidade na gestão (Sr. Carlos) | ✅ Implementado |
+| **Ver/Ocultar Senha** | Dificuldade de digitação (Sarah Rodrigues) | ✅ Implementado |
+| **Pull-to-Refresh** | Falta de atualização em tempo real (Iranildo Rodrigues) | ✅ Implementado |
+| **Endereço Obrigatório** | Imprecisão do GPS (Lucas Matheus) | ✅ Implementado |
+| **Botões Maiores** | Acessibilidade (Teresa Maria ) | ✅ Implementado |
+**Botões Escolher da Galeria** | Sem acesso ao internet (Davylla Faustino) | ✅ Implementado |
+| **Visualização de Endereço na Tabela** | Agilidade na gestão (Lucas Matheus) | ✅ Implementado |

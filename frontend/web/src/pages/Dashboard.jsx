@@ -1,33 +1,32 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import api from '../services/api';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import api from '../services/api';
 
-// --- CORREÇÃO DOS ÍCONES ---
+// Configuração de Ícones do Leaflet
 const shadowUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png';
 
-const createIcon = (url) => {
-  return new L.Icon({
-    iconUrl: url,
-    shadowUrl: shadowUrl,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
+const createIcon = (url) => new L.Icon({
+  iconUrl: url,
+  shadowUrl: shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const icons = {
+  red: createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png'),
+  yellow: createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png'),
+  green: createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png?v=2'),
+  grey: createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png')
 };
 
-// URLs dos Marcadores
-const blueIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png');
-const redIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png');
-const yellowIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png');
-const greenIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png?v=2'); 
-const greyIcon = createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-grey.png');
-// --- FIM CORREÇÃO ---
-
+// Componente Modal de Detalhes
 const DenunciaDetailModal = ({ denuncia, onClose }) => {
   if (!denuncia) return null;
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -46,6 +45,7 @@ const DenunciaDetailModal = ({ denuncia, onClose }) => {
   );
 };
 
+// Componente Tabela de Denúncias
 const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
   const statusOptions = [
     { id: 1, nome: "Recebida" },
@@ -55,10 +55,12 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
   ];
 
   const getStatusClass = (status) => {
-    if (status === 'Recebida') return 'status-recebida';
-    if (status === 'Em Análise') return 'status-em-analise';
-    if (status === 'Resolvida') return 'status-resolvida';
-    return 'status-rejeitada';
+    switch (status) {
+      case 'Recebida': return 'status-recebida';
+      case 'Em Análise': return 'status-em-analise';
+      case 'Resolvida': return 'status-resolvida';
+      default: return 'status-rejeitada';
+    }
   };
 
   return (
@@ -79,8 +81,8 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
             return (
               <tr key={d.id} onClick={() => onRowClick(d)} style={{ cursor: 'pointer' }}>
                 <td>#{d.id.substring(0, 6)}</td>
-                <td>{d.descricao ? d.descricao.substring(0, 25) + (d.descricao.length > 25 ? '...' : '') : 'N/A'}</td>
-                <td>{d.endereco_completo ? d.endereco_completo.substring(0, 20) + '...' : 'N/A'}</td>
+                <td>{d.descricao ? `${d.descricao.substring(0, 25)}${d.descricao.length > 25 ? '...' : ''}` : 'N/A'}</td>
+                <td>{d.endereco_completo ? `${d.endereco_completo.substring(0, 20)}...` : 'N/A'}</td>
                 <td><span className={`status-tag ${getStatusClass(d.nome_status)}`}>{d.nome_status}</span></td>
                 <td>
                   <select 
@@ -88,7 +90,10 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
                     value={statusId}
                     disabled={statusId === 3}
                     onClick={(e) => e.stopPropagation()}
-                    onChange={(e) => { e.stopPropagation(); onStatusChange(d.id, parseInt(e.target.value)); }}
+                    onChange={(e) => { 
+                      e.stopPropagation(); 
+                      onStatusChange(d.id, parseInt(e.target.value)); 
+                    }}
                   >
                     {statusOptions.map(s => <option key={s.id} value={s.id}>{s.nome}</option>)}
                   </select>
@@ -102,6 +107,7 @@ const DenunciasTable = ({ denuncias, onStatusChange, onRowClick }) => {
   );
 };
 
+// Componente Principal Dashboard
 function Dashboard() {
   const [denuncias, setDenuncias] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -110,61 +116,68 @@ function Dashboard() {
   const [modalDenuncia, setModalDenuncia] = useState(null);
 
   useEffect(() => {
-    api.get('/denuncias')
-      .then(res => setDenuncias(res.data.data))
-      .catch(err => setError("Erro ao carregar dados."))
-      .finally(() => setLoading(false));
+    const carregarDados = async () => {
+      try {
+        const res = await api.get('/denuncias');
+        setDenuncias(res.data.data);
+      } catch (err) {
+        setError("Erro ao carregar dados.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    carregarDados();
   }, []);
 
-  // --- CORREÇÃO AQUI: Atualização Otimista do Status ---
   const handleStatusChange = async (id, statusId) => {
     try {
-      // 1. Envia para o backend
       await api.put(`/denuncias/${id}/status`, { id_status: statusId });
       
-      // 2. Mapeia o ID para o Nome localmente (para a UI atualizar na hora)
-      const statusMap = {
-        1: "Recebida",
-        2: "Em Análise",
-        3: "Resolvida",
-        4: "Rejeitada"
-      };
+      const statusMap = { 1: "Recebida", 2: "Em Análise", 3: "Resolvida", 4: "Rejeitada" };
       const novoNome = statusMap[statusId];
 
-      // 3. Atualiza o estado
+      // Atualização Otimista
       setDenuncias(prev => prev.map(d => d.id === id ? { ...d, nome_status: novoNome } : d));
-      
-    } catch (err) { alert("Erro ao atualizar status."); }
+    } catch (err) {
+      alert("Erro ao atualizar status.");
+    }
   };
-  // -----------------------------------------------------
 
   const { filtradas, contagens } = useMemo(() => {
     let list = denuncias;
     const mapStatus = {
-      'Pendente': ['Recebida'], 'Em Andamento': ['Em Análise'], 'Resolvido': ['Resolvida']
+      'Pendente': ['Recebida'],
+      'Em Andamento': ['Em Análise'],
+      'Resolvido': ['Resolvida']
     };
+
     if (filtroStatus !== 'Todos') {
       list = denuncias.filter(d => mapStatus[filtroStatus]?.includes(d.nome_status));
     }
+
     const counts = {
       total: denuncias.length,
       pendente: denuncias.filter(d => d.nome_status === 'Recebida').length,
       andamento: denuncias.filter(d => d.nome_status === 'Em Análise').length,
       resolvida: denuncias.filter(d => d.nome_status === 'Resolvida').length,
     };
+
     return { filtradas: list, contagens: counts };
   }, [denuncias, filtroStatus]);
 
   const getIcone = (status) => {
-    if (status === 'Recebida') return redIcon;
-    if (status === 'Em Análise') return yellowIcon;
-    if (status === 'Resolvida') return greenIcon;
-    return greyIcon;
+    switch (status) {
+      case 'Recebida': return icons.red;
+      case 'Em Análise': return icons.yellow;
+      case 'Resolvida': return icons.green;
+      default: return icons.grey;
+    }
   };
 
   return (
     <>
       <DenunciaDetailModal denuncia={modalDenuncia} onClose={() => setModalDenuncia(null)} />
+      
       <div className="dashboard-container">
         {!loading && !error && (
           <div className="map-container-wrapper">
@@ -173,8 +186,14 @@ function Dashboard() {
               {filtradas.map(d => (
                 <Marker key={d.id} position={[d.latitude, d.longitude]} icon={getIcone(d.nome_status)}>
                   <Popup>
-                    <b>{d.nome_status}</b><br/>{d.descricao}<br/>
-                    <button onClick={() => setModalDenuncia(d)} style={{marginTop:5, cursor:'pointer', color:'blue', textDecoration:'underline', border:'none', background:'none', padding:0}}>Ver Detalhes</button>
+                    <b>{d.nome_status}</b><br/>
+                    {d.descricao}<br/>
+                    <button 
+                      onClick={() => setModalDenuncia(d)} 
+                      style={{marginTop:5, cursor:'pointer', color:'blue', textDecoration:'underline', border:'none', background:'none', padding:0}}
+                    >
+                      Ver Detalhes
+                    </button>
                   </Popup>
                 </Marker>
               ))}

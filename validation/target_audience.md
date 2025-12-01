@@ -4,14 +4,14 @@
 Para a validação do MVP (Produto Mínimo Viável) do **EcoDenúncia**, selecionamos um grupo que representa diretamente os dois lados da nossa solução: cidadãos engajados e lideranças comunitárias locais.
 
 **Identificação Específica:**
-* **Entidade Parceira:** Associação de Moradores do Bairro Jardim América (Fortaleza/CE).
-* **Localização:** Rua Delmiro de Farias, Jardim América, Fortaleza - CE.
-* **Representante Principal (Cidadão/Gestor Local):** Sr. Carlos Mendes (Presidente da Associação).
-* **Grupo de Teste (Cidadãos):** 3 moradores voluntários do bairro que utilizam smartphones Android diariamente.
+* **Entidade Parceira:** Clube de Desbravadores da Igreja Adventista (Fortaleza/CE).
+* **Localização:** Rua Adahil Barreto, 1560, Fortaleza - CE.
+* **Representante Principal (Cidadão/Gestor Local):** Lucas Matheus (Diretor do Clube).
+* **Grupo de Teste (Cidadãos):** 4  desbravadores voluntários do bairro que utilizam smartphones Android diariamente.
 
 ## Justificativa da Escolha
-O bairro Jardim América foi escolhido por apresentar pontos recorrentes de descarte irregular de lixo (especialmente entulho e podas de árvores) em terrenos baldios e esquinas específicas.
-A Associação de Moradores já tenta combater este problema através de grupos de WhatsApp, mas enfrenta dificuldades na organização e formalização dessas denúncias junto à Prefeitura.
+O bairro Siqueira foi escolhido por apresentar pontos recorrentes de descarte irregular de lixo (especialmente entulho e podas de árvores) em terrenos baldios e esquinas específicas.
+A Igreja local já tenta combater este problema através de projetos voluntários que inclue jovens, adolescentes que fazem parte do clube de desbravadores de 10 a 16 anos, mas enfrenta dificuldades na organização e formalização dessas denúncias junto à Prefeitura.
 Este cenário cria o ambiente perfeito para validar se o **EcoDenúncia** consegue substituir processos informais (WhatsApp) por uma ferramenta estruturada e geolocalizada.
 
 ## Contexto e Necessidades Específicas
@@ -22,7 +22,7 @@ Este cenário cria o ambiente perfeito para validar se o **EcoDenúncia** conseg
 * **Anonimato/Segurança:** Sentem-se mais confortáveis a denunciar através de uma aplicação do que a confrontar vizinhos diretamente.
 
 ### 2. Necessidades da Gestão (Associação/Prefeitura)
-* **Visualização Espacial:** O Sr. Carlos (Gestor) precisa ver no mapa onde estão os focos para não ter de percorrer o bairro inteiro à procura.
+* **Visualização Espacial:** O Lucas Matheus (Gestor) precisa ver no mapa onde estão os focos para não ter de percorrer o bairro inteiro à procura.
 * **Prova Visual:** A foto é essencial para distinguir entre "um saco de lixo doméstico" (coleta normal) e "um sofá abandonado" (coleta especial).
 * **Filtragem:** Capacidade de separar o que é "Novo" do que já está "Resolvido" para evitar retrabalho.
 

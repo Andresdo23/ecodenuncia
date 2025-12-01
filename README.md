@@ -77,6 +77,8 @@ O sistema segue uma arquitetura **Cliente-Servidor** baseada em API RESTful.
 3.  Execute o projeto: `npx expo start -c`
 4.  Escaneie o QR Code com o aplicativo **Expo Go** no seu celular.
 
+### Atenção: "Para rodar o backend localmente, renomeie o arquivo .env.example para .env e preencha com as credenciais fornecidas no documento de entrega da atividade (AVA)."
+
 ---
 
 ## 6. Acesso ao Sistema (Produção)
@@ -98,9 +100,9 @@ O sistema foi implantado em ambiente de produção para validação:
 
 ## 7. Validação com Público-Alvo
 
-A solução foi validada com a **Associação de Moradores do Bairro Jardim América**.
+A solução foi validada com a **Clube de Desbravadores da Igreja Adventista do Bairro Siqueira**.
 
-* **Metodologia:** Testes de usabilidade presenciais com o Presidente da Associação (Gestor) e 3 moradores voluntários (Cidadãos).
+* **Metodologia:** Testes de usabilidade presenciais com o Presidente da Associação (Gestor) e 4 moradores voluntários (Cidadãos).
 * **Resultados:**
     * O fluxo de "Nova Denúncia" foi considerado intuitivo e rápido (< 2 min).
     * A funcionalidade de ver a mudança de cor no mapa (Feedback Visual) foi elogiada pela gestão.

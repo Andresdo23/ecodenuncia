@@ -2,38 +2,33 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// URL Fixa do Render (Produção)
 const API_URL = 'https://ecodenuncia.onrender.com/api';
 
 function CadastroGestor() {
   const navigate = useNavigate();
+  
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [chaveSecreta, setChaveSecreta] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  
-  // Estado único para controlar ambas as senhas
-  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
     if (!nome || !email || !senha || !confirmarSenha || !chaveSecreta) {
-        setError('Todos os campos são obrigatórios.');
-        return;
+        return setError('Todos os campos são obrigatórios.');
     }
     if (senha !== confirmarSenha) {
-        setError('As senhas não coincidem.');
-        return;
+        return setError('As senhas não coincidem.');
     }
     if (senha.length < 6) {
-        setError('A senha deve ter pelo menos 6 caracteres.');
-        return;
+        return setError('A senha deve ter pelo menos 6 caracteres.');
     }
 
     setLoading(true);
@@ -49,17 +44,13 @@ function CadastroGestor() {
       navigate('/login');
 
     } catch (err) {
-      if (err.response && err.response.data && err.response.data.error) {
-        setError(err.response.data.error);
-      } else {
-        setError('Erro ao conectar ao servidor. Tente novamente.');
-      }
+      const msg = err.response?.data?.error || 'Erro ao conectar ao servidor. Tente novamente.';
+      setError(msg);
     } finally {
       setLoading(false);
     }
   };
 
-  // --- ESTILOS EM LINHA (Garantia de funcionamento) ---
   const styles = {
     passwordWrapper: {
       position: 'relative',
@@ -70,7 +61,7 @@ function CadastroGestor() {
     input: {
       width: '100%',
       padding: '0.75rem',
-      paddingRight: '70px', // Espaço para o botão
+      paddingRight: '70px',
       fontSize: '1rem',
       border: '1px solid #ccc',
       borderRadius: '4px',
@@ -106,8 +97,6 @@ function CadastroGestor() {
             onChange={(e) => setNome(e.target.value)}
             required
             placeholder="Seu nome"
-            // Reutilizamos o estilo do input, mas ajustamos o paddingRight 
-            // pois este campo não tem botão
             style={{...styles.input, paddingRight: '0.75rem'}}
           />
         </div>
@@ -127,8 +116,6 @@ function CadastroGestor() {
 
         <div className="form-group">
           <label htmlFor="senha">Senha:</label>
-          
-          {/* Wrapper Relativo */}
           <div style={styles.passwordWrapper}>
             <input
               type={mostrarSenha ? "text" : "password"}
@@ -137,9 +124,8 @@ function CadastroGestor() {
               onChange={(e) => setSenha(e.target.value)}
               required
               placeholder="Mínimo 6 caracteres"
-              style={styles.input} // Estilo do input
+              style={styles.input}
             />
-            {/* Botão Absoluto (Controla tudo) */}
             <button 
               type="button" 
               style={styles.toggleBtn}
@@ -152,11 +138,9 @@ function CadastroGestor() {
 
         <div className="form-group">
           <label htmlFor="confirmarSenha">Confirmar Senha:</label>
-          
-          {/* Wrapper Relativo (mesmo sem botão, para manter o estilo do input igual) */}
           <div style={styles.passwordWrapper}>
             <input
-              type={mostrarSenha ? "text" : "password"} // Controlado pelo mesmo estado
+              type={mostrarSenha ? "text" : "password"}
               id="confirmarSenha"
               value={confirmarSenha}
               onChange={(e) => setConfirmarSenha(e.target.value)}
@@ -164,7 +148,6 @@ function CadastroGestor() {
               placeholder="Repita a senha"
               style={styles.input}
             />
-            {/* Sem botão aqui, o de cima já resolve */}
           </div>
         </div>
 
