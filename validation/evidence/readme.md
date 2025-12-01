@@ -40,17 +40,17 @@ Esta pasta contém registros fotográficos e anotações dos testes de usabilida
 ## Evidencia: Público Alvo
 **Participante:** [Desbravadores ]
 **Contexto:** Os usuários felizes com o app
-![▶️ Clique aqui para assistir ao vídeo do público (MP4)](./desbravadores.mp4)
+![▶️ Clique aqui para assistir ao vídeo do público (MP4)](./video/desbravadores.mp4)
 *(Legenda: Público Alvo gritando o nome do App)*
 
 ## Demonstração: Tela do mobile
 **Participante:** [Thayná Stephanie  ]
-![▶️ Clique aqui para assistir ao vídeo do teste (MP4)](./teste_mobile.mp4)
+![▶️ Clique aqui para assistir ao vídeo do teste (MP4)](./video/teste_mobile.mp4)
 *(Legenda: Integrante do grupo Thayná Stephanie, desmonstrando o uso do app)*
 
 ## Demonstração: Tela do Dashboard
 **Participante:** [Thayná Stephanie  ]
-![▶️ Clique aqui para assistir ao vídeo do teste (MP4)](./Teste_Dashboard_Gestao.mp4)
+![▶️ Clique aqui para assistir ao vídeo do teste (MP4)](./video/Teste_Dashboard_Gestao.mp4)
 *(Legenda: Integrante do grupo Thayná Stephanie, desmonstrando o uso do Dashboard)*
 
 
